@@ -1,0 +1,79 @@
+---
+title: "Some Days without Cafeine"
+author: "Radoslav Tsvetkov"
+date: "2022-07-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Try to see the influecne of Caffeine on my Sleep
+
+### Here are the data
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE}
+library(dplyr)
+caf <- read.csv("oura.csv")
+caf$Caffeine.Fact <- as.factor(ifelse(caf$Caffeine == 0, "No", "Yes"))
+grpDat <- group_by(caf, Caffeine.Fact)
+summarize(grpDat, 
+          meanDeep.Sleep = mean(Deep.Sleep.Duration),
+          meain.Total.Sleep = mean(Total.Sleep.Duration),
+          meanLoRHR = mean(Lowest.Resting.Heart.Rate),
+          meanAvHRV = mean(Average.HRV))
+```
+### Table for the Deep Sleep
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE}
+caf$DeepSleep.Stat <-as.factor(ifelse(caf$Deep.Sleep.Duration > mean(caf$Deep.Sleep.Duration), "inc", "dec"))
+
+
+tab.Deep.Sleep <- table(caf$Caffeine.Fact, caf$DeepSleep.Stat)
+names(dimnames(tab.Deep.Sleep)) <- c("Cafeine", "Deep Sleep ")
+
+library(knitr)
+kable(tab.Deep.Sleep, caption = "Deep Sleep Deviation", format = "html", table.attr = "style='width:30%;'")
+
+```
+
+### Let's try fisher test for the Deep Sleep
+
+* H0: The two variables are independent.
+* H1: The two variables relate to each other.
+
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE}
+
+
+fisher.test(tab.Deep.Sleep)
+```
+
+We can NOT reject H0 - the variables might be independent
+
+### Let's try fisher test for the Total Sleep
+
+Total Sleep Deviation
+```{r , echo=FALSE, warning=FALSE, message=FALSE}
+caf$TotSleep.Stat <-as.factor(ifelse(caf$Total.Sleep.Duration > mean(caf$Total.Sleep.Duration), "inc", "dec"))
+
+tab.Tot.Sleep <- table(caf$Caffeine.Fact, caf$TotSleep.Stat)
+names(dimnames(tab.Deep.Sleep)) <- c("Cafeine", "Tot Sleep ")
+
+library(kableExtra)
+tab.Tot.Sleep %>%
+  kbl() %>%
+  kable_paper(full_width = F)   %>% 
+  kable_styling()
+```
+
+### Let's try fisher test for the Total Sleep
+
+* H0: The two variables are independent.
+* H1: The two variables relate to each other.
+
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE}
+fisher.test(tab.Tot.Sleep)
+```
