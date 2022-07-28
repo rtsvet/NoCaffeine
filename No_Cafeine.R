@@ -10,12 +10,14 @@ library(readr)
 caf <- read.csv("oura.csv")
 View(caf)
 
+caf$Caffeine.Fact <- as.factor(ifelse(caf$Caffeine == 0, "No", "Yes"))
+
 library(report)
 library(dplyr)
 library("ggplot2")
 library("GGally")
 
-grpDat <- group_by(caf, Caffeine)
+grpDat <- group_by(caf, Caffeine.Fact)
 summarize(grpDat, 
           meanDeep.Sleep = mean(Deep.Sleep.Duration),
           meain.Total.Sleep = mean(Total.Sleep.Duration),
@@ -29,9 +31,10 @@ summarize(grpDat,
 caf$DeepSleep.Stat <-as.factor(ifelse(caf$Deep.Sleep.Duration > mean(caf$Deep.Sleep.Duration), "inc", "dec"))
 caf$TotSleep.Stat <-as.factor(ifelse(caf$Total.Sleep.Duration > mean(caf$Total.Sleep.Duration), "inc", "dec"))
 
-tab.Deep.Sleep <- table(caf$Caffeine, caf$DeepSleep.Stat)
+tab.Deep.Sleep <- table(caf$Caffeine.Fact, caf$DeepSleep.Stat)
 names(dimnames(tab.Deep.Sleep)) <- c("Cafeine", "Deep Sleep ")
 tab.Deep.Sleep
+kable(tab.Deep.Sleep,  )
 fisher.test(tab.Deep.Sleep)
 
 
