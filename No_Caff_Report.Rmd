@@ -2,7 +2,9 @@
 title: "Some Days without Cafeine"
 author: "Radoslav Tsvetkov"
 date: "2022-07-28"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -40,7 +42,7 @@ hist(caf$Total.Sleep.Dur)
 
 ### Visualise the Data
 ```{r , echo=FALSE, warning=FALSE, message=FALSE}
-par(mfrow = c(2, 2))
+par(mfrow = c(1, 2))
 boxplot(Deep.Sleep.Dur ~ Caf, data = caf)
 stripchart(Deep.Sleep.Dur ~ Caf, data = caf, method = "jitter", vertical = TRUE,
            pch = 19, add = TRUE)
@@ -79,8 +81,10 @@ caf$DeepSleep.Stat <-as.factor(ifelse(caf$Deep.Sleep.Dur > mean(caf$Deep.Sleep.D
 tab.Deep.Sleep <- table(caf$Caf, caf$DeepSleep.Stat)
 names(dimnames(tab.Deep.Sleep)) <- c("Cafeine", "Deep Sleep")
 
-library(knitr)
-kable(tab.Deep.Sleep, caption = "Deep Sleep Deviation", format = "html", table.attr = "style='width:30%;'")
+tab.Deep.Sleep %>%
+  kbl(caption = "Deep Sleep Duration") %>%
+  kable_paper(full_width = F)   %>% 
+  kable_styling(position = "left")
 
 ```
 
@@ -100,7 +104,7 @@ tab.Tot.Sleep <- table(caf$Caf, caf$TotSleep.Stat)
 names(dimnames(tab.Tot.Sleep)) <- c("Cafeine", "Tot Sleep ")
 
 tab.Tot.Sleep %>%
-  kbl() %>%
+  kbl(caption = "Total Sleep Duration") %>%
   kable_paper(full_width = F)   %>% 
   kable_styling(position = "left")
 ```
@@ -117,10 +121,9 @@ fisher.test(tab.Tot.Sleep)
 caf$Rest.Stat <-as.factor(ifelse(caf$Restfulness.Score > mean(caf$Restfulness.Score), "more", "less"))
 tab.Restlessness <- table(caf$Caf, caf$Rest.Stat)
 names(dimnames(tab.Restlessness)) <- c("Cafeine", "Restfulness.Score")
-tab.Restlessness
 
 tab.Restlessness %>%
-  kbl() %>%
+  kbl(caption = "Restfulness.Score") %>%
   kable_paper(full_width = F)   %>% 
   kable_styling(position = "left")
 ```
