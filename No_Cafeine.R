@@ -27,7 +27,7 @@ library(kableExtra)
 sum.tab %>%
   kbl() %>%
   kable_paper(full_width = F)   %>% 
-  kable_styling()
+  kable_styling(position = "left")
 
 summary(caf$Total.Sleep.Dur/3600)
 summary(caf$Deep.Sleep.Dur/3600)
