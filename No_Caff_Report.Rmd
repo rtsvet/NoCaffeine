@@ -62,6 +62,16 @@ stripchart(Avg.HRV ~ Caf, data = caf, method = "jitter", vertical = TRUE,
 par(mfrow = c(1, 1))
 ```
 
+# Let's try fisher tests to see if there's a diffeence
+
+* H0: The two variables are independent.
+* H1: The two variables relate to each other.
+
+As I don't have enough data for ANOVA, I just look if the parameter is more or less.
+I look at the Total Sleep, Deep Sleep etc.
+I drink caffeine only before 12:00 AM
+I use fisher test as for few data points it is more sensitive as Chi Square
+
 ## Influence on Deep Sleep Duration
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE}
@@ -74,11 +84,7 @@ kable(tab.Deep.Sleep, caption = "Deep Sleep Deviation", format = "html", table.a
 
 ```
 
-# Let's try fisher tests to see if there's a diffeence
-
-* H0: The two variables are independent.
-* H1: The two variables relate to each other.
-
+### Fisher Test
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE}
 fisher.test(tab.Deep.Sleep)
@@ -101,9 +107,6 @@ tab.Tot.Sleep %>%
 
 ### Let's try fisher test for the Total Sleep
 
-* H0: The two variables are independent.
-* H1: The two variables relate to each other.
-
 ```{r , echo=FALSE, warning=FALSE, message=FALSE}
 fisher.test(tab.Tot.Sleep)
 ```
@@ -122,10 +125,7 @@ tab.Restlessness %>%
   kable_styling()
 ```
 
-### Let's try fisher test for the Total Sleep
-
-* H0: The two variables are independent.
-* H1: The two variables relate to each other.
+### Let's try fisher test 
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE}
 fisher.test(tab.Restlessness)
